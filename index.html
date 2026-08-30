@@ -1,0 +1,4103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Nexora is a premier enterprise AI engineering and advisory agency architecting autonomous agentic systems, bespoke LLM infrastructure, and high-impact machine learning solutions.">
+  <meta name="theme-color" content="#e6e6e8">
+  <title>Nexora — Intelligent Systems, Real Impact | Premier AI Engineering Agency</title>
+
+  <!-- Typography: Playfair Display + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap"
+    rel="stylesheet">
+
+  <!-- Libraries: Three.js for 3D depth, GSAP for motion choreography -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    /* =========================================================
+       DESIGN TOKENS & MASTER PALETTE (UI/UX PRO MAX SPEC)
+    ========================================================= */
+    :root {
+      /* Brand Color System (Strictly Preserved) */
+      --bg-page: #e6e6e8;
+      --bg-hero-mist: #eceded;
+      --bg-section: #e3e3e5;
+      --bg-section-alt: #d8d8da;
+      --bg-card-light: #d7d7d9;
+      --bg-card-glass: rgba(255, 255, 255, 0.48);
+      --bg-card-hover: rgba(255, 255, 255, 0.72);
+
+      --bg-dark: #1b1c1f;
+      --bg-dark-2: #25262a;
+      --bg-dark-card: #2a2b30;
+      --bg-dark-card-hover: #32333a;
+      --bg-trusted: #35373c;
+      --bg-stats-band: #2e3034;
+
+      --text-heading: #131315;
+      --text-body: #58575d;
+      --text-muted: #88878e;
+      --line: rgba(18, 18, 20, 0.12);
+      --line-soft: rgba(18, 18, 20, 0.07);
+      --line-strong: rgba(18, 18, 20, 0.22);
+
+      --text-white: #f4f4f5;
+      --text-white-dim: #b9b8bd;
+      --text-white-faint: #87868c;
+      --line-dark: rgba(255, 255, 255, 0.14);
+      --line-dark-soft: rgba(255, 255, 255, 0.08);
+
+      --badge-bg: rgba(27, 28, 31, 0.07);
+      --badge-text: #1b1c1f;
+      --accent-glow: rgba(27, 28, 31, 0.12);
+
+      /* Typography */
+      --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+
+      /* Spacing & Layout */
+      --container: 1280px;
+      --gutter: 56px;
+      --radius-pill: 100px;
+      --radius-xl: 24px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+
+      /* Transitions */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset & Base */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--sans);
+      color: var(--text-body);
+      background-color: var(--bg-page);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::selection {
+      background: #1b1c1f;
+      color: #f4f4f5;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.25s var(--ease-out-expo);
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    /* Accessibility Focus States */
+    :focus-visible {
+      outline: 2px solid #1b1c1f;
+      outline-offset: 3px;
+    }
+
+    .wrap {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      width: 100%;
+    }
+
+    /* Custom Scroll Progress Bar */
+    #scrollProgress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #1b1c1f 0%, #68676d 100%);
+      z-index: 1000;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* Eyebrow & Badges */
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-heading);
+      background: var(--badge-bg);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      margin-bottom: 22px;
+      backdrop-filter: blur(8px);
+    }
+
+    .eyebrow.on-dark {
+      color: var(--text-white);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--line-dark);
+    }
+
+    .eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #1b1c1f;
+      display: inline-block;
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    .eyebrow.on-dark .dot {
+      background: #4ade80;
+      box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.4);
+        opacity: 0.5;
+      }
+    }
+
+    /* Typography Hierarchy */
+    h1,
+    h2,
+    h3,
+    h4 {
+      color: var(--text-heading);
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+
+    h2.head {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(28px, 3.4vw, 42px);
+      line-height: 1.18;
+      letter-spacing: -0.015em;
+      color: var(--text-heading);
+    }
+
+    h2.head em {
+      font-style: italic;
+      font-weight: 500;
+      color: #55555a;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 14.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      border-radius: var(--radius-pill);
+      transition: all 0.3s var(--ease-out-expo);
+      position: relative;
+      user-select: none;
+    }
+
+    .btn-solid {
+      background: var(--bg-dark);
+      color: var(--text-white);
+      padding: 14px 16px 14px 26px;
+      box-shadow: 0 8px 24px -6px rgba(27, 28, 31, 0.35);
+    }
+
+    .btn-solid:hover {
+      background: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.45);
+    }
+
+    .btn-solid .ic {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      transition: transform 0.3s var(--ease-out-expo), background 0.3s ease;
+    }
+
+    .btn-solid:hover .ic {
+      transform: translateX(3px) rotate(-8deg);
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .btn-ghost {
+      color: var(--text-heading);
+      font-weight: 600;
+      padding: 12px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-ghost.on-dark {
+      color: var(--text-white);
+      border-color: var(--line-dark);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-ghost .ic {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-ghost.on-dark .ic {
+      border-color: var(--line-dark);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.6);
+      border-color: var(--line-strong);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost.on-dark:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-ghost:hover .ic {
+      transform: scale(1.1);
+      background: rgba(18, 18, 20, 0.08);
+    }
+
+    .btn-ghost.on-dark:hover .ic {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .icon-circle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s var(--ease-out-expo);
+      color: var(--text-heading);
+    }
+
+    .icon-circle-btn:hover {
+      background: var(--bg-dark);
+      color: var(--text-white);
+      border-color: var(--bg-dark);
+      transform: translateY(-2px);
+    }
+
+    /* =========================================================
+       STICKY GLASS HEADER
+    ========================================================= */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 20px 0;
+      transition: all 0.4s var(--ease-out-expo);
+    }
+
+    .site-header.scrolled {
+      padding: 12px 0;
+      background: rgba(230, 230, 232, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    }
+
+    .site-header .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--text-heading);
+      position: relative;
+    }
+
+    .logo-mark-wrap {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      transition: transform 0.5s var(--ease-out-expo);
+    }
+
+    .logo:hover .logo-mark {
+      transform: rotate(90deg) scale(1.08);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #38383c;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--line);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.02em;
+    }
+
+    .status-badge .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      background: rgba(255, 255, 255, 0.45);
+      padding: 6px 20px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .main-nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: #48474d;
+      position: relative;
+      padding: 6px 2px;
+    }
+
+    .main-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--text-heading);
+      transition: width 0.3s var(--ease-out-expo);
+      border-radius: 2px;
+    }
+
+    .main-nav a:hover {
+      color: var(--text-heading);
+    }
+
+    .main-nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.5);
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+
+    .menu-toggle:hover {
+      background: var(--bg-dark);
+      color: #fff;
+    }
+
+    /* Mobile Nav Overlay */
+    .mobile-menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(27, 28, 31, 0.6);
+      backdrop-filter: blur(16px);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(360px, 85vw);
+      background: var(--bg-page);
+      z-index: 100;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(100%);
+      transition: transform 0.4s var(--ease-out-expo);
+      border-left: 1px solid var(--line);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .mobile-menu-overlay.active .mobile-menu {
+      transform: translateX(0);
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .mobile-menu-links a {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-heading);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* =========================================================
+       HERO SECTION + THREE.JS 3D CANVAS
+    ========================================================= */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 120px;
+      padding-bottom: 72px;
+      overflow: hidden;
+      background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.8) 0%, var(--bg-page) 70%);
+    }
+
+    /* Three.js 3D WebGL Canvas Layer */
+    #hero3dCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: auto;
+    }
+
+    .hero-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: linear-gradient(90deg,
+          rgba(230, 230, 232, 0.96) 0%,
+          rgba(230, 230, 232, 0.88) 35%,
+          rgba(230, 230, 232, 0.3) 65%,
+          rgba(230, 230, 232, 0.0) 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 48px;
+      position: relative;
+      z-index: 10;
+      width: 100%;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+    }
+
+    .hero-copy h1 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(40px, 5.2vw, 68px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--text-heading);
+      margin-bottom: 24px;
+    }
+
+    .hero-copy h1 em {
+      font-style: italic;
+      font-weight: 500;
+      color: #55555a;
+      position: relative;
+    }
+
+    .hero-copy p {
+      font-size: clamp(16px, 1.3vw, 18px);
+      line-height: 1.65;
+      color: #525157;
+      max-width: 520px;
+      margin-bottom: 36px;
+    }
+
+    .hero-meta-chips {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #4a494f;
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      backdrop-filter: blur(8px);
+    }
+
+    .meta-chip svg {
+      width: 14px;
+      height: 14px;
+      color: #1b1c1f;
+    }
+
+    .scroll-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .scroll-indicator .circ {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: bob 2.4s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(5px);
+      }
+    }
+
+    /* Right Hero Floating Glass Deck */
+    .hero-interactive-deck {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 20px;
+    }
+
+    .stats-float-card {
+      width: min(320px, 100%);
+      background: rgba(27, 28, 31, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      padding: 28px 26px;
+      box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.45);
+      transform-style: preserve-3d;
+      transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+    }
+
+    .stats-float-card:hover {
+      transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 45px 85px -20px rgba(0, 0, 0, 0.55);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .stats-float-card .deck-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 16px;
+    }
+
+    .stats-float-card .deck-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-white-dim);
+    }
+
+    .stats-float-card .deck-pulse {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #34d399;
+      font-family: var(--mono);
+    }
+
+    .stats-float-card .deck-pulse::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.8);
+      animation: pulseDot 1.8s infinite;
+    }
+
+    .deck-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 14px;
+    }
+
+    .deck-stat-item .num {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: 26px;
+      color: var(--text-white);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .deck-stat-item .label {
+      font-size: 12px;
+      color: var(--text-white-dim);
+      font-weight: 400;
+    }
+
+    .interactive-3d-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #6a6970;
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      backdrop-filter: blur(8px);
+    }
+
+    .interactive-3d-hint svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* =========================================================
+       INFINITE TRUSTED BRAND STREAM
+    ========================================================= */
+    .trusted-band {
+      background: var(--bg-trusted);
+      padding: 30px 0;
+      position: relative;
+      z-index: 15;
+      overflow: hidden;
+      border-top: 1px solid var(--line-dark-soft);
+      border-bottom: 1px solid var(--line-dark-soft);
+    }
+
+    .trusted-inner {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .trusted-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-white-faint);
+      line-height: 1.4;
+      flex: none;
+      padding-right: 28px;
+      border-right: 1px solid var(--line-dark);
+    }
+
+    .marquee-wrapper {
+      display: flex;
+      overflow: hidden;
+      user-select: none;
+      mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      flex: 1;
+    }
+
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 52px;
+      animation: marqueeScroll 24s linear infinite;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .marquee-wrapper:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes marqueeScroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--text-white-dim);
+      opacity: 0.85;
+      transition: all 0.25s ease;
+      cursor: default;
+    }
+
+    .brand-pill:hover {
+      color: #fff;
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .brand-pill svg {
+      width: 20px;
+      height: 20px;
+      flex: none;
+    }
+
+    /* =========================================================
+       SECTION BASE LAYOUTS
+    ========================================================= */
+    section {
+      position: relative;
+    }
+
+    .section-pad {
+      padding: 110px 0;
+    }
+
+    .bg-section {
+      background: var(--bg-section);
+    }
+
+    .bg-section-alt {
+      background: var(--bg-section-alt);
+    }
+
+    /* =========================================================
+       WHAT WE DO / INTERACTIVE 3D NEURAL WAVE & ACCORDION
+    ========================================================= */
+    .whatwedo-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 0.8fr 1.3fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .wwd-copy p {
+      font-size: 15.5px;
+      line-height: 1.68;
+      color: var(--text-body);
+      margin: 22px 0 32px;
+    }
+
+    /* Interactive Three.js 3D Synaptic Wave Canvas */
+    .wwd-visual-container {
+      position: relative;
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(227, 227, 229, 0) 70%);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    #synapticWaveCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .wwd-visual-overlay {
+      position: absolute;
+      bottom: 14px;
+      font-size: 11.5px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.6);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      pointer-events: none;
+    }
+
+    /* Service Accordion List */
+    .service-accordion-list {
+      border-top: 1px solid var(--line-strong);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-accordion-item {
+      border-bottom: 1px solid var(--line);
+      transition: background 0.25s ease;
+    }
+
+    .service-accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 8px;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .service-header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .service-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      width: 24px;
+      flex: none;
+    }
+
+    .service-title {
+      font-size: 16.5px;
+      font-weight: 600;
+      color: var(--text-heading);
+      transition: color 0.25s ease;
+    }
+
+    .service-accordion-item:hover .service-title,
+    .service-accordion-item.active .service-title {
+      color: #000;
+    }
+
+    .service-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      transition: transform 0.35s var(--ease-out-expo), background 0.25s ease;
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .service-accordion-item.active .service-icon-box {
+      transform: rotate(45deg);
+      background: var(--bg-dark);
+      color: var(--text-white);
+      border-color: var(--bg-dark);
+    }
+
+    .service-accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s var(--ease-out-expo), padding 0.3s ease;
+      padding: 0 8px;
+    }
+
+    .service-accordion-item.active .service-accordion-body {
+      max-height: 240px;
+      padding-bottom: 22px;
+    }
+
+    .service-body-inner {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-body);
+    }
+
+    .service-tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tech-tag {
+      font-size: 11px;
+      font-family: var(--mono);
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--line);
+      padding: 3px 9px;
+      border-radius: 6px;
+      color: #38373d;
+    }
+
+    /* =========================================================
+       INTERACTIVE FEATURED WORK & CASE STUDY SHOWCASE
+    ========================================================= */
+    .featured-work-section {
+      background: var(--bg-section);
+      padding-bottom: 110px;
+    }
+
+    .fw-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .fw-filters {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.4);
+      color: var(--text-body);
+      transition: all 0.25s ease;
+    }
+
+    .filter-btn:hover {
+      background: rgba(255, 255, 255, 0.8);
+      color: var(--text-heading);
+    }
+
+    .filter-btn.active {
+      background: var(--bg-dark);
+      color: var(--text-white);
+      border-color: var(--bg-dark);
+    }
+
+    .fw-pager {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-family: var(--mono);
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+
+    /* Featured Work Main Card Carousel */
+    .fw-card-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.18);
+    }
+
+    .fw-slide {
+      display: none;
+      grid-template-columns: 380px 1fr;
+      min-height: 380px;
+      background: var(--bg-dark-card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+
+    .fw-slide.active {
+      display: grid;
+      animation: fadeInSlide 0.5s var(--ease-out-expo) forwards;
+    }
+
+    @keyframes fadeInSlide {
+      from {
+        opacity: 0;
+        transform: scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .fw-info {
+      background: var(--bg-dark-card);
+      color: var(--text-white);
+      padding: 44px 38px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .fw-info .fw-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 12px;
+    }
+
+    .fw-info h3 {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(24px, 2.5vw, 30px);
+      line-height: 1.2;
+      color: var(--text-white);
+      margin-bottom: 14px;
+    }
+
+    .fw-info p {
+      font-size: 14.5px;
+      line-height: 1.65;
+      color: var(--text-white-dim);
+    }
+
+    .fw-impact-chips {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .fw-impact-chip {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .fw-impact-chip .val {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .fw-impact-chip .lbl {
+      font-size: 10.5px;
+      color: var(--text-white-dim);
+    }
+
+    .fw-visual {
+      position: relative;
+      background: #1e1f23;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .fw-visual svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out-expo);
+    }
+
+    .fw-slide:hover .fw-visual svg {
+      transform: scale(1.03);
+    }
+
+    /* =========================================================
+       INTERACTIVE AI ROI & VALUE CALCULATOR (PREMIUM ADDITION)
+    ========================================================= */
+    .roi-calculator-section {
+      background: var(--bg-section-alt);
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .roi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .roi-card {
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-xl);
+      padding: 40px 36px;
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.08);
+      backdrop-filter: blur(16px);
+    }
+
+    .roi-slider-group {
+      margin-bottom: 28px;
+    }
+
+    .roi-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .roi-slider-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-heading);
+    }
+
+    .roi-slider-val {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-heading);
+      background: rgba(27, 28, 31, 0.08);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* Range slider custom styling */
+    input[type="range"] {
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: #c8c8cc;
+      outline: none;
+      transition: background 0.2s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: #000;
+    }
+
+    /* ROI Output Display Box */
+    .roi-results-box {
+      background: var(--bg-dark);
+      color: var(--text-white);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .roi-stat-block .roi-big-num {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .roi-stat-block .roi-stat-label {
+      font-size: 12px;
+      color: var(--text-white-dim);
+    }
+
+    /* =========================================================
+       OUR APPROACH & STEP-BY-STEP PIPELINE
+    ========================================================= */
+    .approach-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.65fr;
+      gap: 56px;
+    }
+
+    .approach-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+      padding-top: 24px;
+    }
+
+    .approach-steps::before {
+      content: "";
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      right: 24px;
+      height: 0;
+      border-top: 1.5px dashed rgba(18, 18, 20, 0.28);
+      transform: translateY(22px);
+      z-index: 1;
+    }
+
+    .step-card {
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s var(--ease-out-expo);
+      cursor: pointer;
+    }
+
+    .step-card:hover,
+    .step-card.active {
+      background: rgba(255, 255, 255, 0.85);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 32px -10px rgba(0, 0, 0, 0.08);
+      border-color: var(--line-strong);
+    }
+
+    .step-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--bg-section);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .step-card:hover .step-icon,
+    .step-card.active .step-icon {
+      background: var(--bg-dark);
+      color: #fff;
+    }
+
+    .step-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .step-num {
+      font-size: 12px;
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-body);
+    }
+
+    /* =========================================================
+       INSIGHTS & RESEARCH HUB
+    ========================================================= */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: 0.68fr 1.9fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .insight-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .insight-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      transition: all 0.3s var(--ease-out-expo);
+      cursor: pointer;
+    }
+
+    .insight-card:hover {
+      background: rgba(255, 255, 255, 0.85);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.08);
+      border-color: var(--line-strong);
+    }
+
+    .insight-thumb {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      height: 124px;
+      margin-bottom: 14px;
+      background: #333;
+    }
+
+    .insight-thumb svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .insight-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .insight-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-heading);
+      line-height: 1.45;
+      margin-bottom: 16px;
+      flex: 1;
+    }
+
+    .insight-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-heading);
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .insight-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .insight-card:hover .insight-link svg {
+      transform: translateX(3px);
+    }
+
+    /* =========================================================
+       DARK STATS BAND WITH 3D PARTICLE CONSTELLATION
+    ========================================================= */
+    .stats-band {
+      background: var(--bg-stats-band);
+      position: relative;
+      overflow: hidden;
+      padding: 72px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    #stats3dCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .stats-band .wrap {
+      position: relative;
+      z-index: 2;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stats-row .stat {
+      text-align: center;
+      padding: 8px 24px;
+      border-left: 1px solid var(--line-dark-soft);
+    }
+
+    .stats-row .stat:first-child {
+      border-left: none;
+    }
+
+    .stats-row .num {
+      font-family: var(--serif);
+      font-weight: 600;
+      font-size: clamp(34px, 3.8vw, 48px);
+      color: var(--text-white);
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+
+    .stats-row .label {
+      font-size: 13.5px;
+      color: var(--text-white-dim);
+      font-weight: 400;
+    }
+
+    /* =========================================================
+       TESTIMONIAL & SOCIAL PROOF
+    ========================================================= */
+    .testimonial {
+      background: var(--bg-section-alt);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .testimonial .wrap {
+      display: grid;
+      grid-template-columns: 1.15fr 1px 1.45fr;
+      gap: 48px;
+      align-items: center;
+      padding: 64px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .t-divider {
+      width: 1px;
+      height: 100px;
+      background: var(--line-strong);
+      align-self: center;
+    }
+
+    .quote-mark {
+      width: 32px;
+      height: 24px;
+      color: #98979e;
+      margin-bottom: 16px;
+    }
+
+    .t-quote p {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text-heading);
+      font-weight: 500;
+      margin-bottom: 22px;
+      max-width: 440px;
+    }
+
+    .t-person {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .t-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      flex: none;
+      background: linear-gradient(135deg, #7c7b82, #3c3b40);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .t-person .pname {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-heading);
+    }
+
+    .t-person .prole {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .t-brands-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    /* =========================================================
+       FAQ SECTION (UI/UX PRO MAX TRUST ENGINE)
+    ========================================================= */
+    .faq-section {
+      background: var(--bg-section);
+      padding: 96px 0;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.4fr;
+      gap: 56px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .faq-item.active {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: var(--line-strong);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--text-heading);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .faq-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+      background: var(--bg-dark);
+      color: #fff;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease-out-expo), padding 0.25s ease;
+      padding: 0 20px;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-body);
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 180px;
+      padding-bottom: 20px;
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+    .site-footer {
+      background: var(--bg-section);
+      padding-top: 96px;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-cta {
+      display: grid;
+      grid-template-columns: 0.85fr 2fr;
+      gap: 48px;
+      padding-bottom: 72px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .footer-cta h2 {
+      font-size: 34px;
+      margin-bottom: 16px;
+    }
+
+    .footer-cta p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-body);
+      max-width: 320px;
+      margin-bottom: 28px;
+    }
+
+    .footer-cols {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .footer-col h4 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 14px;
+    }
+
+    .footer-col ul a {
+      font-size: 14px;
+      color: #4b4a4f;
+      transition: color 0.2s ease;
+    }
+
+    .footer-col ul a:hover {
+      color: var(--text-heading);
+    }
+
+    .footer-col .contact-line {
+      font-size: 14px;
+      color: #4b4a4f;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .newsletter {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-pill);
+      padding: 5px 5px 5px 18px;
+      background: rgba(255, 255, 255, 0.45);
+      max-width: 260px;
+      transition: border-color 0.25s ease;
+    }
+
+    .newsletter:focus-within {
+      border-color: var(--text-heading);
+      background: #fff;
+    }
+
+    .newsletter input {
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 13px;
+      color: var(--text-heading);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .newsletter input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .newsletter button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+      transition: transform 0.2s ease;
+    }
+
+    .newsletter button:hover {
+      transform: scale(1.08);
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-bottom .copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-bottom .tagline {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .to-top {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s var(--ease-out-expo);
+      cursor: pointer;
+    }
+
+    .to-top:hover {
+      transform: translateY(-4px);
+      background: #000;
+    }
+
+    /* =========================================================
+       INTERACTIVE MODALS & DRAWERS (CONSULTATION & CASE STUDY)
+    ========================================================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(19, 19, 21, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s var(--ease-out-expo);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--bg-page);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-xl);
+      max-width: 680px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 44px;
+      position: relative;
+      box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.35);
+      transform: scale(0.94) translateY(20px);
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: var(--bg-dark);
+      color: #fff;
+    }
+
+    /* Consultation Form Styles */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-heading);
+      margin-bottom: 8px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line-strong);
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      color: var(--text-heading);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--bg-dark);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(27, 28, 31, 0.1);
+    }
+
+    .service-select-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .pill-radio {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.5);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .pill-radio.selected {
+      background: var(--bg-dark);
+      color: #fff;
+      border-color: var(--bg-dark);
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s var(--ease-out-expo);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast-msg.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* =========================================================
+       RESPONSIVE BREAKPOINTS (UI/UX PRO MAX AUDITED)
+    ========================================================= */
+    @media (max-width: 1080px) {
+      :root {
+        --gutter: 36px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-interactive-deck {
+        align-items: flex-start;
+      }
+
+      .whatwedo-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .wwd-visual-container {
+        height: 260px;
+        order: 2;
+      }
+
+      .roi-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .approach-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .approach-steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .approach-steps::before {
+        display: none;
+      }
+
+      .insights-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .insight-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .faq-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-cta {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-cols {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 20px;
+      }
+
+      .fw-slide {
+        grid-template-columns: 320px 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-nav {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .status-badge {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 100px;
+        padding-bottom: 48px;
+      }
+
+      .section-pad {
+        padding: 72px 0;
+      }
+
+      .hero-copy h1 {
+        font-size: 38px;
+      }
+
+      .stats-float-card {
+        width: 100%;
+      }
+
+      .fw-slide {
+        grid-template-columns: 1fr;
+      }
+
+      .fw-visual {
+        height: 220px;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px 0;
+      }
+
+      .stats-row .stat:nth-child(3) {
+        border-left: none;
+      }
+
+      .testimonial .wrap {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 48px 0;
+      }
+
+      .t-divider {
+        display: none;
+      }
+
+      .modal-card {
+        padding: 32px 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --gutter: 20px;
+      }
+
+      .insight-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .approach-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-cols {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .hero-copy h1 {
+        font-size: 32px;
+      }
+
+      .roi-results-box {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Scroll Progress Bar -->
+  <div id="scrollProgress" aria-hidden="true"></div>
+
+  <!-- =========================================================
+       STICKY GLASS HEADER
+  ========================================================= -->
+  <header class="site-header" id="siteHeader">
+    <div class="wrap">
+      <a href="#" class="logo" aria-label="Nexora Homepage">
+        <div class="logo-mark-wrap">
+          <svg class="logo-mark" viewBox="0 0 28 28" fill="none">
+            <circle cx="8" cy="8" r="5.4" fill="#151517" />
+            <circle cx="20" cy="8" r="5.4" fill="#151517" />
+            <circle cx="8" cy="20" r="5.4" fill="#151517" />
+            <circle cx="20" cy="20" r="5.4" fill="#151517" />
+            <circle cx="14" cy="14" r="3.6" fill="#e6e6e8" />
+          </svg>
+        </div>
+        NEXORA
+      </a>
+
+      <div class="status-badge">
+        <span class="live-dot"></span>
+        <span>Mesh Active · v4.2</span>
+      </div>
+
+      <nav class="main-nav" aria-label="Main Navigation">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#roi-calc">ROI Impact</a>
+        <a href="#approach">Approach</a>
+        <a href="#insights">Insights</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-solid" onclick="openConsultationModal()" aria-label="Open Consultation Dialog">
+          Let's Talk
+          <span class="ic">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg>
+          </span>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Mobile Menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="mobile-menu-overlay" id="mobileOverlay">
+    <div class="mobile-menu">
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <a href="#" class="logo">NEXORA</a>
+          <button class="modal-close" id="closeMobileMenu" style="position:static;" aria-label="Close Menu">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="mobile-menu-links">
+          <a href="#services" onclick="closeMobileNav()">Services</a>
+          <a href="#work" onclick="closeMobileNav()">Work & Case Studies</a>
+          <a href="#roi-calc" onclick="closeMobileNav()">ROI Calculator</a>
+          <a href="#approach" onclick="closeMobileNav()">Our Approach</a>
+          <a href="#insights" onclick="closeMobileNav()">Insights & Trends</a>
+          <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+        </div>
+      </div>
+      <button class="btn btn-solid" style="width:100%;" onclick="closeMobileNav(); openConsultationModal();">
+        Start Consultation
+        <span class="ic">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <line x1="7" y1="17" x2="17" y2="7" />
+            <polyline points="7 7 17 7 17 17" />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       HERO SECTION WITH THREE.JS INTERACTIVE 3D DEPTH
+  ========================================================= -->
+  <section class="hero" id="heroSection">
+    <!-- Three.js 3D WebGL Neural Core Canvas -->
+    <canvas id="hero3dCanvas"></canvas>
+    <div class="hero-gradient-overlay"></div>
+
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="dot"></span>Premier AI Engineering &amp; Advisory</div>
+          <h1>Intelligent systems,<br>Real <em>impact</em>.</h1>
+          <p>We architect and deploy autonomous multi-agent systems, fine-tuned enterprise LLMs, and high-throughput AI
+            pipelines that turn complex data into measurable compound growth.</p>
+
+          <div class="btn-row">
+            <button class="btn btn-solid" onclick="openConsultationModal()">
+              Start a Project
+              <span class="ic">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7" />
+                  <polyline points="7 7 17 7 17 17" />
+                </svg>
+              </span>
+            </button>
+            <a href="#work" class="btn btn-ghost">
+              Explore Case Studies
+              <span class="ic">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </a>
+          </div>
+
+          <div class="hero-meta-chips">
+            <span class="meta-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Top-Rated AI Studio
+            </span>
+            <span class="meta-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+              Enterprise SLA Guarantee
+            </span>
+            <span class="meta-chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              SOC2 &amp; HIPAA Compliant
+            </span>
+          </div>
+
+          <div class="scroll-indicator">
+            <span class="circ">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <polyline points="19 12 12 19 5 12" />
+              </svg>
+            </span>
+            Scroll to discover capabilities
+          </div>
+        </div>
+
+        <!-- Right Floating 3D Telemetry Deck -->
+        <div class="hero-interactive-deck">
+          <div class="stats-float-card" id="heroTiltCard">
+            <div class="deck-header">
+              <span class="deck-title">Agentic Telemetry</span>
+              <span class="deck-pulse">v4.2 Live</span>
+            </div>
+            <div class="deck-stats-grid">
+              <div class="deck-stat-item">
+                <div class="num" data-count="50">50+</div>
+                <div class="label">Production Systems</div>
+              </div>
+              <div class="deck-stat-item">
+                <div class="num" data-count="98">98%</div>
+                <div class="label">Client Retention</div>
+              </div>
+              <div class="deck-stat-item">
+                <div class="num">12ms</div>
+                <div class="label">P99 Inference</div>
+              </div>
+              <div class="deck-stat-item">
+                <div class="num">$42M+</div>
+                <div class="label">Value Generated</div>
+              </div>
+            </div>
+          </div>
+          <div class="interactive-3d-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+              <path d="M2 12h20" />
+            </svg>
+            Interactive 3D Space · Move Cursor
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       INFINITE TRUSTED BRANDS STREAM
+  ========================================================= -->
+  <section class="trusted-band" aria-label="Trusted Enterprise Brands">
+    <div class="wrap trusted-inner">
+      <div class="trusted-label">TRUSTED BY<br>INNOVATIVE LEADERS</div>
+      <div class="marquee-wrapper">
+        <div class="marquee-track" id="brandMarqueeTrack">
+          <!-- Brands populated dynamically with high-precision SVGs -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       WHAT WE DO / INTERACTIVE 3D WAVE & CAPABILITIES
+  ========================================================= -->
+  <section class="bg-section section-pad" id="services">
+    <div class="wrap">
+      <div class="whatwedo-grid">
+        <div class="wwd-copy">
+          <div class="eyebrow"><span class="dot"></span>WHAT WE DO</div>
+          <h2 class="head">AI solutions that don't just automate, they <em>elevate</em>.</h2>
+          <p>We combine strategic foresight, robust data engineering, and state-of-the-art model architectures to build
+            future-ready intelligent infrastructure.</p>
+          <button class="btn btn-ghost" onclick="openConsultationModal()">
+            Request Custom Scope
+            <span class="ic">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                stroke-linecap="round">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <!-- Center Interactive 3D Synaptic Wave Canvas -->
+        <div class="wwd-visual-container">
+          <canvas id="synapticWaveCanvas"></canvas>
+          <div class="wwd-visual-overlay">3D Neural Latent Field · Hover to Perturb</div>
+        </div>
+
+        <!-- Right Expandable Capability Accordion -->
+        <div class="service-accordion-list" id="serviceAccordion">
+          <!-- Item 01 -->
+          <div class="service-accordion-item active">
+            <div class="service-accordion-header" onclick="toggleService(this)">
+              <div class="service-header-left">
+                <span class="service-num">01</span>
+                <span class="service-title">AI Strategy &amp; Enterprise Roadmapping</span>
+              </div>
+              <span class="service-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </div>
+            <div class="service-accordion-body">
+              <div class="service-body-inner">
+                We identify high-leverage AI opportunities, evaluate technical feasibility, and design end-to-end
+                architectures that maximize ROI while mitigating security risks.
+                <div class="service-tech-tags">
+                  <span class="tech-tag">Feasibility Audits</span>
+                  <span class="tech-tag">Security &amp; Governance</span>
+                  <span class="tech-tag">ROI Scoping</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 02 -->
+          <div class="service-accordion-item">
+            <div class="service-accordion-header" onclick="toggleService(this)">
+              <div class="service-header-left">
+                <span class="service-num">02</span>
+                <span class="service-title">Autonomous Multi-Agent Systems</span>
+              </div>
+              <span class="service-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </div>
+            <div class="service-accordion-body">
+              <div class="service-body-inner">
+                Orchestrate collaborative AI agent swarms capable of complex reasoning, tool usage, planning, and
+                autonomous execution across enterprise software stacks.
+                <div class="service-tech-tags">
+                  <span class="tech-tag">LangGraph</span>
+                  <span class="tech-tag">AutoGPT</span>
+                  <span class="tech-tag">Tool-Calling LLMs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 03 -->
+          <div class="service-accordion-item">
+            <div class="service-accordion-header" onclick="toggleService(this)">
+              <div class="service-header-left">
+                <span class="service-num">03</span>
+                <span class="service-title">Custom LLM Fine-Tuning &amp; RAG</span>
+              </div>
+              <span class="service-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </div>
+            <div class="service-accordion-body">
+              <div class="service-body-inner">
+                Domain-adapted foundation models with hybrid vector retrieval (GraphRAG, dense semantic search) yielding
+                99.4% precision with zero data leakage.
+                <div class="service-tech-tags">
+                  <span class="tech-tag">LoRA / QLoRA</span>
+                  <span class="tech-tag">vLLM Inference</span>
+                  <span class="tech-tag">Pinecone / Qdrant</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 04 -->
+          <div class="service-accordion-item">
+            <div class="service-accordion-header" onclick="toggleService(this)">
+              <div class="service-header-left">
+                <span class="service-num">04</span>
+                <span class="service-title">High-Throughput Data Engineering</span>
+              </div>
+              <span class="service-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </div>
+            <div class="service-accordion-body">
+              <div class="service-body-inner">
+                Clean, robust pipelines that ingest multi-terabyte unstructured data streams in real time, normalizing
+                context for continuous model learning.
+                <div class="service-tech-tags">
+                  <span class="tech-tag">Kafka</span>
+                  <span class="tech-tag">Apache Spark</span>
+                  <span class="tech-tag">dbt / Snowflake</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 05 -->
+          <div class="service-accordion-item">
+            <div class="service-accordion-header" onclick="toggleService(this)">
+              <div class="service-header-left">
+                <span class="service-num">05</span>
+                <span class="service-title">Computer Vision &amp; Multimodal AI</span>
+              </div>
+              <span class="service-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </div>
+            <div class="service-accordion-body">
+              <div class="service-body-inner">
+                Sub-millisecond visual anomaly detection, spatial scene understanding, and OCR systems deployed on edge
+                or cloud clusters.
+                <div class="service-tech-tags">
+                  <span class="tech-tag">PyTorch</span>
+                  <span class="tech-tag">TensorRT</span>
+                  <span class="tech-tag">YOLOv10 / SAM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item 06 -->
+          <div class="service-accordion-item">
+            <div class="service-accordion-header" onclick="toggleService(this)">
+              <div class="service-header-left">
+                <span class="service-num">06</span>
+                <span class="service-title">Production Observability &amp; Guardrails</span>
+              </div>
+              <span class="service-icon-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </span>
+            </div>
+            <div class="service-accordion-body">
+              <div class="service-body-inner">
+                Continuous hallucination tracking, prompt injection firewalls, latency optimization, and automated drift
+                re-training loops.
+                <div class="service-tech-tags">
+                  <span class="tech-tag">LangSmith</span>
+                  <span class="tech-tag">Arize Phoenix</span>
+                  <span class="tech-tag">NeMo Guardrails</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FEATURED WORK / INTERACTIVE CASE STUDY SHOWCASE
+  ========================================================= -->
+  <section class="featured-work-section" id="work">
+    <div class="wrap">
+      <div class="fw-top">
+        <div>
+          <div class="eyebrow"><span class="dot"></span>PROVEN RESULTS</div>
+          <h2 class="head">Featured Case Studies</h2>
+        </div>
+        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+          <div class="fw-filters">
+            <button class="filter-btn active" onclick="filterProjects('all', this)">All</button>
+            <button class="filter-btn" onclick="filterProjects('agents', this)">Agentic Systems</button>
+            <button class="filter-btn" onclick="filterProjects('llm', this)">Enterprise LLMs</button>
+            <button class="filter-btn" onclick="filterProjects('vision', this)">Computer Vision</button>
+          </div>
+          <div class="fw-pager">
+            <button class="icon-circle-btn" onclick="prevSlide()" aria-label="Previous Slide">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+            </button>
+            <button class="icon-circle-btn" onclick="nextSlide()" aria-label="Next Slide">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </button>
+            <span id="slideCounter" style="margin-left:6px;">01 / 04</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Container -->
+      <div class="fw-card-container">
+        <!-- Slide 01: Conversational AI Assistant -->
+        <div class="fw-slide active" data-category="llm agents" data-index="0">
+          <div class="fw-info">
+            <div>
+              <div class="fw-tag">Conversational AI &amp; Agents · Vertex Global</div>
+              <h3>Autonomous Customer Support Mesh</h3>
+              <p>An omni-channel agentic assistant that understands contextual intent, interacts with enterprise ERP
+                APIs, and autonomously resolves 78% of support tickets without human intervention.</p>
+              <div class="fw-impact-chips">
+                <div class="fw-impact-chip">
+                  <div class="val">+340%</div>
+                  <div class="lbl">Throughput Surge</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">82%</div>
+                  <div class="lbl">OpEx Reduction</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">4.9/5</div>
+                  <div class="lbl">CSAT Rating</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-ghost on-dark" onclick="openCaseStudyModal(0)">
+                View Full Architecture
+                <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.4">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg></span>
+              </button>
+            </div>
+          </div>
+          <div class="fw-visual" id="fwVisual0"></div>
+        </div>
+
+        <!-- Slide 02: Financial Semantic Intelligence -->
+        <div class="fw-slide" data-category="llm" data-index="1">
+          <div class="fw-info">
+            <div>
+              <div class="fw-tag">Enterprise RAG &amp; FinTech · Moonhub Capital</div>
+              <h3>Sub-15ms Financial Semantic Intelligence</h3>
+              <p>Engineered a distributed vector graph reasoning engine querying over 45M SEC filings, earnings calls,
+                and market reports with zero hallucination and strict citation auditability.</p>
+              <div class="fw-impact-chips">
+                <div class="fw-impact-chip">
+                  <div class="val">12ms</div>
+                  <div class="lbl">P99 Query Latency</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">99.8%</div>
+                  <div class="lbl">Retrieval Precision</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">10x</div>
+                  <div class="lbl">Analyst Velocity</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-ghost on-dark" onclick="openCaseStudyModal(1)">
+                View Full Architecture
+                <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.4">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg></span>
+              </button>
+            </div>
+          </div>
+          <div class="fw-visual" id="fwVisual1"></div>
+        </div>
+
+        <!-- Slide 03: Supply Chain Predictive Engine -->
+        <div class="fw-slide" data-category="agents" data-index="2">
+          <div class="fw-info">
+            <div>
+              <div class="fw-tag">Predictive Analytics · Boltshift Logistics</div>
+              <h3>Autonomous Supply Chain Forecaster</h3>
+              <p>End-to-end time-series neural network forecasting global cargo demand and dynamic route re-allocation
+                across 1,200 shipping corridors during international port disruptions.</p>
+              <div class="fw-impact-chips">
+                <div class="fw-impact-chip">
+                  <div class="val">$14.2M</div>
+                  <div class="lbl">Saved in Overstock</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">96.4%</div>
+                  <div class="lbl">Forecast Accuracy</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">-38%</div>
+                  <div class="lbl">Transit Idle Time</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-ghost on-dark" onclick="openCaseStudyModal(2)">
+                View Full Architecture
+                <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.4">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg></span>
+              </button>
+            </div>
+          </div>
+          <div class="fw-visual" id="fwVisual2"></div>
+        </div>
+
+        <!-- Slide 04: Industrial Computer Vision -->
+        <div class="fw-slide" data-category="vision" data-index="3">
+          <div class="fw-info">
+            <div>
+              <div class="fw-tag">Computer Vision · Hyperion Robotics</div>
+              <h3>Sub-Millimeter Anomaly Inspection</h3>
+              <p>Real-time edge camera pipeline running customized TensorRT visual models on high-speed manufacturing
+                lines, detecting micro-surface defects in under 8 milliseconds.</p>
+              <div class="fw-impact-chips">
+                <div class="fw-impact-chip">
+                  <div class="val">0.002%</div>
+                  <div class="lbl">Defect Escape Rate</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">2,400</div>
+                  <div class="lbl">Units / Minute</div>
+                </div>
+                <div class="fw-impact-chip">
+                  <div class="val">99.9%</div>
+                  <div class="lbl">Uptime SLA</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-ghost on-dark" onclick="openCaseStudyModal(3)">
+                View Full Architecture
+                <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.4">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg></span>
+              </button>
+            </div>
+          </div>
+          <div class="fw-visual" id="fwVisual3"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       INTERACTIVE ENTERPRISE AI ROI & VALUE CALCULATOR
+  ========================================================= -->
+  <section class="roi-calculator-section" id="roi-calc">
+    <div class="wrap">
+      <div class="roi-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span>VALUE ESTIMATOR</div>
+          <h2 class="head">Calculate your projected <em>annual AI ROI</em>.</h2>
+          <p style="margin:20px 0 28px; font-size:15.5px; line-height:1.65; color:var(--text-body);">
+            Discover how automating repetitive analytical and operational workflows with Nexora agent swarms impacts
+            your bottom line in under 6 months.
+          </p>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div
+              style="display:flex; align-items:center; gap:12px; font-size:14px; font-weight:600; color:var(--text-heading);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Standard 2.4 Month Full Cost Payback
+            </div>
+            <div
+              style="display:flex; align-items:center; gap:12px; font-size:14px; font-weight:600; color:var(--text-heading);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Zero Retraining Lock-in · Full IP Ownership
+            </div>
+            <div
+              style="display:flex; align-items:center; gap:12px; font-size:14px; font-weight:600; color:var(--text-heading);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.4">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              Continuous 99.4% Precision Benchmark Guarantee
+            </div>
+          </div>
+          <button class="btn btn-solid" style="margin-top:36px;" onclick="requestRoiReport()">
+            Claim Custom Feasibility Report
+            <span class="ic">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <!-- Interactive Calculator Card -->
+        <div class="roi-card">
+          <!-- Slider 1: Team Size -->
+          <div class="roi-slider-group">
+            <div class="roi-slider-header">
+              <span class="roi-slider-title">Knowledge Workers / Team Members</span>
+              <span class="roi-slider-val" id="teamSizeVal">45 People</span>
+            </div>
+            <input type="range" id="teamSizeSlider" min="5" max="300" value="45" oninput="updateRoiCalc()">
+          </div>
+
+          <!-- Slider 2: Hours spent on manual tasks -->
+          <div class="roi-slider-group">
+            <div class="roi-slider-header">
+              <span class="roi-slider-title">Manual Hours / Worker / Week</span>
+              <span class="roi-slider-val" id="hoursVal">14 Hours</span>
+            </div>
+            <input type="range" id="hoursSlider" min="2" max="35" value="14" oninput="updateRoiCalc()">
+          </div>
+
+          <!-- Slider 3: Blended Hourly Rate -->
+          <div class="roi-slider-group">
+            <div class="roi-slider-header">
+              <span class="roi-slider-title">Average Hourly Blended Rate ($/hr)</span>
+              <span class="roi-slider-val" id="rateVal">$85 / hr</span>
+            </div>
+            <input type="range" id="rateSlider" min="30" max="250" value="85" step="5" oninput="updateRoiCalc()">
+          </div>
+
+          <!-- Results Display -->
+          <div class="roi-results-box">
+            <div class="roi-stat-block">
+              <div class="roi-big-num" id="roiAnnualSavings">$1,940,400</div>
+              <div class="roi-stat-label">Projected Annual Savings</div>
+            </div>
+            <div class="roi-stat-block">
+              <div class="roi-big-num" id="roiHoursSaved">22,800 hrs</div>
+              <div class="roi-stat-label">Annual Hours Reclaimed</div>
+            </div>
+            <div class="roi-stat-block">
+              <div class="roi-big-num" id="roiMultiplier">4.6x</div>
+              <div class="roi-stat-label">Operational Speedup</div>
+            </div>
+            <div class="roi-stat-block">
+              <div class="roi-big-num">2.1 Mo</div>
+              <div class="roi-stat-label">Estimated Breakeven</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       OUR PROVEN APPROACH / STEP-BY-STEP TIMELINE
+  ========================================================= -->
+  <section class="bg-section section-pad" id="approach">
+    <div class="wrap">
+      <div class="approach-grid">
+        <div class="approach-copy">
+          <div class="eyebrow"><span class="dot"></span>OUR PROCESS</div>
+          <h2 class="head">A proven approach to deliver <em>scalable AI systems</em>.</h2>
+          <p style="margin:20px 0 28px; font-size:15px; line-height:1.65; color:var(--text-body);">
+            We follow a rigorous, transparent engineering methodology from day zero discovery to enterprise-grade
+            production deployment.
+          </p>
+          <button class="btn btn-ghost" onclick="openConsultationModal()">
+            Download Process Whitepaper
+            <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.4">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg></span>
+          </button>
+        </div>
+
+        <div class="approach-steps">
+          <!-- Step 01 -->
+          <div class="step-card active" onclick="activateStep(this)">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <div class="step-num">STAGE 01</div>
+            <div class="step-title">Discover &amp; Audit</div>
+            <div class="step-desc">Deep-dive technical assessment into your data infrastructure, API readiness, and
+              high-impact AI opportunities.</div>
+          </div>
+
+          <!-- Step 02 -->
+          <div class="step-card" onclick="activateStep(this)">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                <rect x="14" y="14" width="7" height="7" rx="1.5" />
+              </svg>
+            </div>
+            <div class="step-num">STAGE 02</div>
+            <div class="step-title">Blueprint &amp; Design</div>
+            <div class="step-desc">Architecting custom agentic workflows, model fine-tuning topologies, and security
+              isolation firewalls.</div>
+          </div>
+
+          <!-- Step 03 -->
+          <div class="step-card" onclick="activateStep(this)">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="4" />
+                <path d="M12 8v8M8.5 10l3.5-2 3.5 2M8.5 14l3.5 2 3.5-2" />
+              </svg>
+            </div>
+            <div class="step-num">STAGE 03</div>
+            <div class="step-title">Build &amp; Benchmark</div>
+            <div class="step-desc">Agile development sprints, synthetic eval sets, automated regression suites, and
+              latency optimizations.</div>
+          </div>
+
+          <!-- Step 04 -->
+          <div class="step-card" onclick="activateStep(this)">
+            <div class="step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path
+                  d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+              </svg>
+            </div>
+            <div class="step-num">STAGE 04</div>
+            <div class="step-title">Deploy &amp; Scale</div>
+            <div class="step-desc">Zero-downtime cluster rollout, 24/7 telemetry monitoring, hallucination guardrails,
+              and continuous improvement.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       INSIGHTS & RESEARCH HUB
+  ========================================================= -->
+  <section class="bg-section section-pad" id="insights" style="padding-top:0;">
+    <div class="wrap">
+      <div class="insights-grid">
+        <div class="insights-copy">
+          <div class="eyebrow"><span class="dot"></span>INSIGHTS &amp; LABS</div>
+          <h2 class="head">Ideas shaping the <em>future of AI</em>.</h2>
+          <p style="margin:16px 0 24px; font-size:14.5px; color:var(--text-body); line-height:1.6;">
+            Our research team regularly publishes architectural benchmarks, model analyses, and tactical blueprints.
+          </p>
+          <a href="#contact" class="btn btn-ghost">
+            Subscribe to Research
+            <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.4">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg></span>
+          </a>
+        </div>
+
+        <div class="insight-cards" id="insightCards">
+          <!-- Card 01 -->
+          <div class="insight-card" onclick="openInsightModal(0)">
+            <div class="insight-thumb" id="th0"></div>
+            <div class="insight-tag">AI Strategy · 6 min read</div>
+            <div class="insight-title">Architecting Enterprise AI Roadmaps That Drive Measurable Capital Value</div>
+            <div class="insight-link">
+              Read Briefing
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Card 02 -->
+          <div class="insight-card" onclick="openInsightModal(1)">
+            <div class="insight-thumb" id="th1"></div>
+            <div class="insight-tag">Agentic Mesh · 8 min read</div>
+            <div class="insight-title">The Rise of Autonomous Multi-Agent Swarms in Regulated Industries</div>
+            <div class="insight-link">
+              Read Briefing
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Card 03 -->
+          <div class="insight-card" onclick="openInsightModal(2)">
+            <div class="insight-thumb" id="th2"></div>
+            <div class="insight-tag">Data Systems · 5 min read</div>
+            <div class="insight-title">GraphRAG vs Hybrid Dense Retrieval: Production Benchmarks at Scale</div>
+            <div class="insight-link">
+              Read Briefing
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Card 04 -->
+          <div class="insight-card" onclick="openInsightModal(3)">
+            <div class="insight-thumb" id="th3"></div>
+            <div class="insight-tag">Frontiers · 7 min read</div>
+            <div class="insight-title">On-Device Small Language Models (SLMs) and Low-Latency Edge Inference</div>
+            <div class="insight-link">
+              Read Briefing
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       DARK STATS BAND WITH 3D PARTICLE CONSTELLATION
+  ========================================================= -->
+  <section class="stats-band">
+    <canvas id="stats3dCanvas"></canvas>
+    <div class="wrap">
+      <div class="stats-row">
+        <div class="stat">
+          <div class="num" data-target="50">0</div>
+          <div class="label">Production Systems Deployed</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-target="98" data-suffix="%">0</div>
+          <div class="label">Client Retention &amp; Satisfaction</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-target="30" data-suffix="M+">0</div>
+          <div class="label">End-Users Impacted Daily</div>
+        </div>
+        <div class="stat">
+          <div class="num" data-target="99" data-suffix=".4%">0</div>
+          <div class="label">Model Benchmark Precision</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       TESTIMONIAL & SOCIAL PROOF
+  ========================================================= -->
+  <section class="testimonial">
+    <div class="wrap">
+      <div class="t-quote">
+        <svg class="quote-mark" viewBox="0 0 40 28" fill="currentColor">
+          <path
+            d="M0 28V16.5Q0 8 4.5 3.8 9 0 15.5 0v6.2q-4 0-6 2.6-2 2.5-2 6.2h8V28H0Zm22 0V16.5Q22 8 26.5 3.8 31 0 37.5 0v6.2q-4 0-6 2.6-2 2.5-2 6.2h8V28H22Z" />
+        </svg>
+        <p>"Nexora transformed our core operational pipeline with an agentic solution that exceeded our highest
+          benchmarks. Their engineering rigor is truly unmatched in the industry."</p>
+        <div class="t-person">
+          <div class="t-avatar">SJ</div>
+          <div>
+            <div class="pname">Sarah Johnson</div>
+            <div class="prole">Chief Technology Officer, Vertex Industries</div>
+          </div>
+        </div>
+      </div>
+      <div class="t-divider"></div>
+      <div class="t-brands">
+        <div class="t-brands-label">POWERING TRANSFORMATION FOR GLOBAL INDUSTRY LEADERS</div>
+        <div style="display:flex; gap:36px; flex-wrap:wrap; align-items:center;" id="testimonialBrands">
+          <!-- Reusable partner monograms -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FAQ SECTION (UI/UX PRO MAX TRUST ENGINE)
+  ========================================================= -->
+  <section class="faq-section" id="faq">
+    <div class="wrap">
+      <div class="faq-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span>FREQUENTLY ASKED</div>
+          <h2 class="head">Everything you need to know about <em>working with us</em>.</h2>
+          <p style="margin-top:18px; font-size:15px; color:var(--text-body);">
+            Have specific technical or security questions? Our engineering leads are ready to discuss your specific
+            infrastructure.
+          </p>
+          <button class="btn btn-ghost" style="margin-top:24px;" onclick="openConsultationModal()">
+            Ask an Engineer
+            <span class="ic"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.4">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg></span>
+          </button>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item active">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <span>How do you protect our proprietary data and confidential IP?</span>
+              <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.4">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg></span>
+            </div>
+            <div class="faq-answer">
+              We deploy models strictly within your Virtual Private Cloud (VPC) or on-premise infrastructure. No
+              customer data is ever transmitted to public model endpoints or used for training without explicit
+              cryptographic air-gapping. You retain 100% intellectual property ownership.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <span>What is the typical timeline for an enterprise AI deployment?</span>
+              <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.4">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg></span>
+            </div>
+            <div class="faq-answer">
+              A rapid proof-of-value (PoV) benchmark pilot is delivered in 2 to 3 weeks. Production enterprise
+              integrations, including full security sign-off, typically range from 6 to 12 weeks depending on data
+              complexity and API interfaces.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <span>How do you ensure zero hallucinations in high-stakes environments?</span>
+              <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.4">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg></span>
+            </div>
+            <div class="faq-answer">
+              We utilize deterministic guardrails, multi-agent cross-verification consensus protocols, citation
+              anchoring, and continuous semantic drift monitoring with real-time confidence scores.
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+              <span>Can you integrate with our existing ERP, CRM, and cloud stack?</span>
+              <span class="faq-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.4">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg></span>
+            </div>
+            <div class="faq-answer">
+              Yes. We build native connectors for AWS, GCP, Azure, Snowflake, Databricks, Salesforce, SAP, and custom
+              REST/GraphQL services via secure OAuth and mTLS.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================= -->
+  <footer class="site-footer" id="contact">
+    <div class="wrap">
+      <div class="footer-cta">
+        <div>
+          <h2 class="head">Ready to build <em>what's next</em>?</h2>
+          <p>Let's architect intelligent systems that elevate your organization to the pinnacle of industry performance.
+          </p>
+          <button class="btn btn-solid" onclick="openConsultationModal()">
+            Start a Consultation
+            <span class="ic">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <line x1="7" y1="17" x2="17" y2="7" />
+                <polyline points="7 7 17 7 17 17" />
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <div class="footer-cols">
+          <div class="footer-col">
+            <h4>Navigation</h4>
+            <ul>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#work">Case Studies</a></li>
+              <li><a href="#roi-calc">ROI Calculator</a></li>
+              <li><a href="#approach">Our Approach</a></li>
+              <li><a href="#insights">Insights &amp; Research</a></li>
+              <li><a href="#faq">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Capabilities</h4>
+            <ul>
+              <li><a href="#services">Autonomous Agent Swarms</a></li>
+              <li><a href="#services">Enterprise LLM Systems</a></li>
+              <li><a href="#services">GraphRAG Retrieval</a></li>
+              <li><a href="#services">Computer Vision &amp; OCR</a></li>
+              <li><a href="#services">AI Security Guardrails</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Company</h4>
+            <ul>
+              <li><a href="#">About Nexora</a></li>
+              <li><a href="#">Engineering Careers</a></li>
+              <li><a href="#">Security &amp; Compliance</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h4>Let's Connect</h4>
+            <div class="contact-line">hello@nexora.ai</div>
+            <div class="contact-line">+1 (415) 890-4200</div>
+            <div class="contact-line">San Francisco, CA · Zurich</div>
+            <form class="newsletter" onsubmit="handleNewsletter(event)">
+              <input type="email" placeholder="Enter your email" required aria-label="Work Email">
+              <button type="submit" aria-label="Subscribe to Research">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="copy">© 2026 Nexora AI Agency. All rights reserved. Sovereign AI Engineering.</div>
+        <div class="tagline">
+          Precision Engineering · Provable Impact
+          <span class="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to Top">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+              <line x1="12" y1="19" x2="12" y2="5" />
+              <polyline points="5 12 12 5 19 12" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       INTERACTIVE CONSULTATION / SCOPING MODAL
+  ========================================================= -->
+  <div class="modal-overlay" id="consultationModal" onclick="handleModalOverlayClick(event, 'consultationModal')">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeModal('consultationModal')" aria-label="Close Modal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <div class="eyebrow"><span class="dot"></span>EXECUTIVE CONSULTATION</div>
+      <h2 class="head" style="font-size:28px; margin-bottom:10px;">Start your <em>AI initiative</em>.</h2>
+      <p style="font-size:14.5px; color:var(--text-body); margin-bottom:24px;">
+        Connect directly with our Principal AI Architects. We respond with a preliminary feasibility blueprint within 24
+        hours.
+      </p>
+
+      <form id="consultationForm" onsubmit="handleConsultationSubmit(event)">
+        <div class="form-group">
+          <label>Target Capability Area</label>
+          <div class="service-select-pills">
+            <span class="pill-radio selected" onclick="selectPill(this)">Autonomous Agents</span>
+            <span class="pill-radio" onclick="selectPill(this)">Custom LLM &amp; Fine-Tuning</span>
+            <span class="pill-radio" onclick="selectPill(this)">High-Throughput Data</span>
+            <span class="pill-radio" onclick="selectPill(this)">Computer Vision</span>
+            <span class="pill-radio" onclick="selectPill(this)">Security Audit</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label for="cName">Your Name *</label>
+            <input type="text" id="cName" class="form-control" placeholder="Jane Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="cEmail">Work Email *</label>
+            <input type="email" id="cEmail" class="form-control" placeholder="jane@enterprise.com" required>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label for="cCompany">Organization / Company *</label>
+            <input type="text" id="cCompany" class="form-control" placeholder="Acme Global Inc." required>
+          </div>
+          <div class="form-group">
+            <label for="cBudget">Estimated Investment</label>
+            <select id="cBudget" class="form-control">
+              <option value="50k-100k">$50,000 – $100,000 (PoV Pilot)</option>
+              <option value="100k-250k" selected>$100,000 – $250,000 (Full Integration)</option>
+              <option value="250k+">$250,000+ (Enterprise Multi-Mesh)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cDetails">Initiative Goals &amp; Current Technical Challenges</label>
+          <textarea id="cDetails" class="form-control" rows="3"
+            placeholder="Describe the current workflow bottlenecks or AI ambitions..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-solid" style="width:100%; margin-top:8px;">
+          Submit Architecture Request
+          <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.4">
+              <line x1="7" y1="17" x2="17" y2="7" />
+              <polyline points="7 7 17 7 17 17" />
+            </svg></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       CASE STUDY DEEP-DIVE MODAL
+  ========================================================= -->
+  <div class="modal-overlay" id="caseStudyModal" onclick="handleModalOverlayClick(event, 'caseStudyModal')">
+    <div class="modal-card" style="max-width:760px;">
+      <button class="modal-close" onclick="closeModal('caseStudyModal')" aria-label="Close Modal">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <div id="caseStudyModalContent">
+        <!-- Dynamic content injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Feedback -->
+  <div class="toast-msg" id="toastMsg">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+    <span id="toastText">Request submitted successfully! We'll be in touch shortly.</span>
+  </div>
+
+  <!-- =========================================================
+       JAVASCRIPT LOGIC: THREE.JS 3D SCENES & INTERACTIVITY
+  ========================================================= -->
+  <script>
+    /* =========================================================
+       1. BRAND MARQUEE DATA & INITIALIZATION
+    ========================================================= */
+    const BRANDS = [
+      { name: 'Vertex', icon: '<path d="M12 2 22 8.5 12 22 2 8.5Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>' },
+      { name: 'Moonhub', icon: '<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/>' },
+      { name: 'Cloudex', icon: '<path d="M6.5 18a4.2 4.2 0 0 1-.6-8.35 5.5 5.5 0 0 1 10.7-1.9A4.3 4.3 0 0 1 17 18H6.5Z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>' },
+      { name: 'SnapShot', icon: '<path d="M9.5 14.5 14.5 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M11 7l1.2-1.2a3 3 0 1 1 4.2 4.2L15 11" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M13 17l-1.2 1.2a3 3 0 1 1-4.2-4.2L9 12.8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>' },
+      { name: 'Pulse AI', icon: '<rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M7 13l2.5-4 2 5 2-3 2.5 2" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' },
+      { name: 'Boltshift', icon: '<path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="currentColor"/>' },
+      { name: 'Hyperion', icon: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="1.6" fill="none"/>' },
+      { name: 'Cerebras', icon: '<rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.8" fill="none"/><line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="1.8"/><line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="1.8"/>' }
+    ];
+
+    function initBrandMarquee() {
+      const track = document.getElementById('brandMarqueeTrack');
+      if (!track) return;
+      const brandItems = BRANDS.map(b => `
+        <span class="brand-pill">
+          <svg viewBox="0 0 24 24">${b.icon}</svg>
+          <span>${b.name}</span>
+        </span>
+      `).join('');
+      // Duplicate for seamless infinite loop
+      track.innerHTML = brandItems + brandItems + brandItems;
+
+      const testBrandContainer = document.getElementById('testimonialBrands');
+      if (testBrandContainer) {
+        testBrandContainer.innerHTML = BRANDS.slice(0, 5).map(b => `
+          <span class="brand-pill" style="color:#525157;">
+            <svg viewBox="0 0 24 24">${b.icon}</svg>
+            <span>${b.name}</span>
+          </span>
+        `).join('');
+      }
+    }
+    initBrandMarquee();
+
+    /* =========================================================
+       2. THREE.JS INTERACTIVE 3D HERO NEURAL CORE SCENE
+    ========================================================= */
+    function initHero3DScene() {
+      const canvas = document.getElementById('hero3dCanvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+      camera.position.z = 18;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // 3D Neural Group
+      const neuralGroup = new THREE.Group();
+      scene.add(neuralGroup);
+
+      // Inner Wireframe Dodecahedron / Core
+      const coreGeo = new THREE.IcosahedronGeometry(4.8, 1);
+      const coreMat = new THREE.MeshStandardMaterial({
+        color: 0x222327,
+        wireframe: true,
+        roughness: 0.2,
+        metalness: 0.85
+      });
+      const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+      neuralGroup.add(coreMesh);
+
+      // Inner Solid Dark Core with soft refraction
+      const solidGeo = new THREE.IcosahedronGeometry(3.2, 0);
+      const solidMat = new THREE.MeshStandardMaterial({
+        color: 0x1b1c1f,
+        roughness: 0.4,
+        metalness: 0.6,
+        wireframe: false
+      });
+      const solidMesh = new THREE.Mesh(solidGeo, solidMat);
+      neuralGroup.add(solidMesh);
+
+      // Orbiting Outer Ring 1
+      const ring1Geo = new THREE.TorusGeometry(6.2, 0.04, 16, 100);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x5a5a60, transparent: true, opacity: 0.6 });
+      const ring1 = new THREE.Mesh(ring1Geo, ringMat);
+      ring1.rotation.x = Math.PI / 3;
+      neuralGroup.add(ring1);
+
+      // Orbiting Outer Ring 2
+      const ring2Geo = new THREE.TorusGeometry(7.0, 0.03, 16, 100);
+      const ring2 = new THREE.Mesh(ring2Geo, ringMat);
+      ring2.rotation.y = Math.PI / 4;
+      neuralGroup.add(ring2);
+
+      // Floating Particle Cloud (1,000 Neural Nodes)
+      const particleCount = 1000;
+      const particleGeo = new THREE.BufferGeometry();
+      const positions = new Float32Array(particleCount * 3);
+      const scales = new Float32Array(particleCount);
+
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        const radius = 5 + Math.random() * 12;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos((Math.random() * 2) - 1);
+
+        positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        positions[i + 2] = radius * Math.cos(phi);
+        scales[i / 3] = Math.random() * 2;
+      }
+      particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const particleMat = new THREE.PointsMaterial({
+        color: 0x333338,
+        size: 0.12,
+        transparent: true,
+        opacity: 0.55
+      });
+      const particleSystem = new THREE.Points(particleGeo, particleMat);
+      neuralGroup.add(particleSystem);
+
+      // Ambient & Directional Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+      scene.add(ambientLight);
+
+      const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.2);
+      dirLight1.position.set(10, 20, 15);
+      scene.add(dirLight1);
+
+      const dirLight2 = new THREE.DirectionalLight(0x888899, 0.8);
+      dirLight2.position.set(-10, -10, -10);
+      scene.add(dirLight2);
+
+      // Interactive Mouse Follow & Parallax
+      let mouseX = 0, mouseY = 0;
+      let targetX = 0, targetY = 0;
+
+      window.addEventListener('mousemove', (e) => {
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+        mouseX = (e.clientX - windowHalfX) * 0.0008;
+        mouseY = (e.clientY - windowHalfY) * 0.0008;
+      });
+
+      // Position group slightly to the right for balance
+      neuralGroup.position.x = 4.2;
+      neuralGroup.position.y = 0.2;
+
+      function resize() {
+        const width = canvas.parentElement.clientWidth;
+        const height = canvas.parentElement.clientHeight;
+        camera.aspect = width / height;
+        if (window.innerWidth < 768) {
+          neuralGroup.position.x = 0;
+          neuralGroup.position.y = 1.5;
+          camera.position.z = 22;
+        } else {
+          neuralGroup.position.x = 4.2;
+          neuralGroup.position.y = 0.2;
+          camera.position.z = 18;
+        }
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      // Render Loop
+      let clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const elapsedTime = clock.getElapsedTime();
+
+        targetX += (mouseX - targetX) * 0.05;
+        targetY += (mouseY - targetY) * 0.05;
+
+        neuralGroup.rotation.y = elapsedTime * 0.15 + targetX * 2;
+        neuralGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.1 + targetY * 2;
+
+        ring1.rotation.z = elapsedTime * 0.25;
+        ring2.rotation.x = elapsedTime * 0.2;
+
+        coreMesh.rotation.y = -elapsedTime * 0.2;
+        solidMesh.rotation.x = elapsedTime * 0.1;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+    initHero3DScene();
+
+    /* =========================================================
+       3. THREE.JS 3D SYNAPTIC WAVE (SERVICES SECTION)
+    ========================================================= */
+    function initSynapticWave() {
+      const canvas = document.getElementById('synapticWaveCanvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+      camera.position.set(0, 6, 14);
+      camera.lookAt(0, 0, 0);
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Grid Wave Plane Geometry
+      const rows = 45, cols = 45;
+      const count = rows * cols;
+      const positions = new Float32Array(count * 3);
+      const originalY = new Float32Array(count);
+
+      let idx = 0;
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          const u = (i / (rows - 1) - 0.5) * 16;
+          const v = (j / (cols - 1) - 0.5) * 16;
+          positions[idx * 3] = u;
+          positions[idx * 3 + 1] = 0;
+          positions[idx * 3 + 2] = v;
+          originalY[idx] = 0;
+          idx++;
+        }
+      }
+
+      const waveGeo = new THREE.BufferGeometry();
+      waveGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const waveMat = new THREE.PointsMaterial({
+        color: 0x222326,
+        size: 0.14,
+        transparent: true,
+        opacity: 0.65
+      });
+      const waveMesh = new THREE.Points(waveGeo, waveMat);
+      scene.add(waveMesh);
+
+      let mouseX = 0;
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      });
+
+      function resize() {
+        const width = canvas.parentElement.clientWidth;
+        const height = canvas.parentElement.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      let clock = new THREE.Clock();
+      function animateWave() {
+        requestAnimationFrame(animateWave);
+        const time = clock.getElapsedTime();
+        const posAttr = waveGeo.attributes.position;
+        const array = posAttr.array;
+
+        let pIdx = 0;
+        for (let i = 0; i < rows; i++) {
+          for (let j = 0; j < cols; j++) {
+            const u = array[pIdx * 3];
+            const v = array[pIdx * 3 + 2];
+            const wave1 = Math.sin(u * 0.5 + time * 2.0) * 0.7;
+            const wave2 = Math.cos(v * 0.4 + time * 1.5 + mouseX * 2) * 0.6;
+            array[pIdx * 3 + 1] = wave1 + wave2;
+            pIdx++;
+          }
+        }
+        posAttr.needsUpdate = true;
+        waveMesh.rotation.y = time * 0.08;
+        renderer.render(scene, camera);
+      }
+      animateWave();
+    }
+    initSynapticWave();
+
+    /* =========================================================
+       4. THREE.JS 3D PARTICLE CONSTELLATION (STATS BAND)
+    ========================================================= */
+    function initStats3DCanvas() {
+      const canvas = document.getElementById('stats3dCanvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+      camera.position.z = 10;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      const particleCount = 200;
+      const positions = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 30;
+        positions[i + 1] = (Math.random() - 0.5) * 10;
+        positions[i + 2] = (Math.random() - 0.5) * 15;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, opacity: 0.25 });
+      const particles = new THREE.Points(geo, mat);
+      scene.add(particles);
+
+      function resize() {
+        const width = canvas.parentElement.clientWidth;
+        const height = canvas.parentElement.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function animateStats() {
+        requestAnimationFrame(animateStats);
+        particles.rotation.y += 0.001;
+        particles.rotation.x += 0.0005;
+        renderer.render(scene, camera);
+      }
+      animateStats();
+    }
+    initStats3DCanvas();
+
+    /* =========================================================
+       5. FEATURED WORK SVGs & REUSABLE ARCH SCENES
+    ========================================================= */
+    function makeArchScene(tone, accentColor) {
+      const sky = tone === 'dark' ? '#25262a' : '#dcdde0';
+      const mtn1 = tone === 'dark' ? '#1b1c1f' : '#b2b3b8';
+      const mtn2 = tone === 'dark' ? '#121215' : '#8a8a90';
+      const accent = accentColor || '#5a5b60';
+
+      return `
+        <svg viewBox="0 0 600 380" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g_${Math.random()}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${sky}"/>
+              <stop offset="100%" stop-color="${mtn1}"/>
+            </linearGradient>
+          </defs>
+          <rect width="600" height="380" fill="${sky}"/>
+          <path d="M0 380 L120 180 L240 290 L380 140 L520 280 L600 200 L600 380 Z" fill="${mtn2}" opacity="0.6"/>
+          <path d="M0 380 L180 220 L300 320 L440 180 L600 340 L600 380 Z" fill="${mtn1}"/>
+          <circle cx="480" cy="110" r="45" fill="${accent}" opacity="0.3"/>
+          <g stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4 4">
+            <line x1="50" y1="380" x2="300" y2="180"/>
+            <line x1="300" y1="180" x2="550" y2="380"/>
+            <circle cx="300" cy="180" r="6" fill="#fff"/>
+          </g>
+        </svg>
+      `;
+    }
+
+    document.getElementById('fwVisual0').innerHTML = makeArchScene('dark', '#4ade80');
+    document.getElementById('fwVisual1').innerHTML = makeArchScene('light', '#60a5fa');
+    document.getElementById('fwVisual2').innerHTML = makeArchScene('dark', '#f59e0b');
+    document.getElementById('fwVisual3').innerHTML = makeArchScene('light', '#a78bfa');
+
+    // Insight Thumbnails
+    ['th0', 'th1', 'th2', 'th3'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = makeArchScene(i % 2 === 0 ? 'dark' : 'light');
+    });
+
+    /* =========================================================
+       6. INTERACTIVE CAROUSEL & FILTERS
+    ========================================================= */
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.fw-slide');
+    const counterEl = document.getElementById('slideCounter');
+
+    function updateCarousel() {
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlide);
+      });
+      if (counterEl) {
+        counterEl.textContent = `0${currentSlide + 1} / 0${slides.length}`;
+      }
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateCarousel();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      updateCarousel();
+    }
+
+    function filterProjects(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (cat === 'all') {
+        slides.forEach((s, i) => {
+          if (i === 0) { currentSlide = 0; s.classList.add('active'); }
+          else { s.classList.remove('active'); }
+        });
+      } else {
+        const matchIdx = Array.from(slides).findIndex(s => s.dataset.category.includes(cat));
+        if (matchIdx !== -1) {
+          currentSlide = matchIdx;
+          updateCarousel();
+        }
+      }
+    }
+
+    /* =========================================================
+       7. INTERACTIVE ROI CALCULATOR
+    ========================================================= */
+    function updateRoiCalc() {
+      const teamSize = parseInt(document.getElementById('teamSizeSlider').value, 10);
+      const hours = parseInt(document.getElementById('hoursSlider').value, 10);
+      const rate = parseInt(document.getElementById('rateSlider').value, 10);
+
+      document.getElementById('teamSizeVal').textContent = `${teamSize} People`;
+      document.getElementById('hoursVal').textContent = `${hours} Hours`;
+      document.getElementById('rateVal').textContent = `$${rate} / hr`;
+
+      // Calculation: 52 weeks/yr * teamSize * hours * rate * 0.72 efficiency capture
+      const annualHoursSaved = Math.round(teamSize * hours * 52 * 0.72);
+      const annualSavings = Math.round(annualHoursSaved * rate);
+
+      document.getElementById('roiAnnualSavings').textContent = `$${annualSavings.toLocaleString()}`;
+      document.getElementById('roiHoursSaved').textContent = `${annualHoursSaved.toLocaleString()} hrs`;
+      document.getElementById('roiMultiplier').textContent = `${(3.2 + (hours / 10)).toFixed(1)}x`;
+    }
+    updateRoiCalc();
+
+    function requestRoiReport() {
+      const savings = document.getElementById('roiAnnualSavings').textContent;
+      openConsultationModal();
+      const detailsField = document.getElementById('cDetails');
+      if (detailsField) {
+        detailsField.value = `Requesting custom enterprise feasibility audit based on projected annual savings of ${savings}.`;
+      }
+    }
+
+    /* =========================================================
+       8. ACCORDION & TIMELINE TOGGLES
+    ========================================================= */
+    function toggleService(header) {
+      const item = header.parentElement;
+      const allItems = document.querySelectorAll('.service-accordion-item');
+      allItems.forEach(i => {
+        if (i !== item) i.classList.remove('active');
+      });
+      item.classList.toggle('active');
+    }
+
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const allFaqs = document.querySelectorAll('.faq-item');
+      allFaqs.forEach(f => {
+        if (f !== item) f.classList.remove('active');
+      });
+      item.classList.toggle('active');
+    }
+
+    function activateStep(card) {
+      document.querySelectorAll('.step-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    }
+
+    /* =========================================================
+       9. INTERSECTION OBSERVER COUNTER ANIMATIONS
+    ========================================================= */
+    const countObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const statEls = entry.target.querySelectorAll('.num[data-target]');
+          statEls.forEach(el => {
+            const target = parseFloat(el.getAttribute('data-target'));
+            const suffix = el.getAttribute('data-suffix') || '+';
+            let current = 0;
+            const step = target / 40;
+            const timer = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                el.textContent = `${target}${suffix}`;
+                clearInterval(timer);
+              } else {
+                el.textContent = `${Math.floor(current)}${suffix}`;
+              }
+            }, 30);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const statsBand = document.querySelector('.stats-band');
+    if (statsBand) countObserver.observe(statsBand);
+
+    /* =========================================================
+       10. MODALS & FORMS
+    ========================================================= */
+    function openModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function handleModalOverlayClick(e, id) {
+      if (e.target.id === id) closeModal(id);
+    }
+
+    function openConsultationModal() {
+      openModal('consultationModal');
+    }
+
+    function selectPill(pill) {
+      document.querySelectorAll('.pill-radio').forEach(p => p.classList.remove('selected'));
+      pill.classList.add('selected');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastMsg');
+      const text = document.getElementById('toastText');
+      if (text) text.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    function handleConsultationSubmit(e) {
+      e.preventDefault();
+      closeModal('consultationModal');
+      showToast("Thank you! Your AI blueprint request has been received. Our team will contact you within 24h.");
+      e.target.reset();
+    }
+
+    function handleNewsletter(e) {
+      e.preventDefault();
+      showToast("Subscribed! You will receive our weekly AI research briefings.");
+      e.target.reset();
+    }
+
+    // Case Study Modal Details
+    const CASE_STUDIES = [
+      {
+        title: "Autonomous Customer Operations Mesh",
+        client: "Vertex Global Enterprises",
+        category: "Enterprise Multi-Agent LLMs",
+        metrics: "+340% Ticket Resolution Rate · 82% OpEx Reduction · 12ms P99 Latency",
+        challenge: "Handling over 250,000 monthly technical support inquiries across 42 languages while maintaining high CSAT and complying with strict enterprise SLA requirements.",
+        solution: "Engineered a collaborative swarm of 8 specialized agent personas utilizing fine-tuned Llama-3-70B models, tool-use verification sandbox, and hybrid GraphRAG index over enterprise knowledge bases.",
+        architecture: "React Client -> API Gateway (mTLS) -> LangGraph Orchestration Cluster -> vLLM Distributed Inference Nodes (4x H100) -> Vector Cache (Qdrant) -> ERP Action Connectors."
+      },
+      {
+        title: "Sub-15ms Financial Semantic Intelligence",
+        client: "Moonhub Capital",
+        category: "Enterprise RAG & Quantitative Systems",
+        metrics: "12ms Query Latency · 99.8% Precision · 10x Velocity",
+        challenge: "Portfolio analysts needed instant, cited synthesis across 45M SEC filings, earnings calls, and global market feeds with zero tolerance for hallucinations.",
+        solution: "Deployed a customized dense retrieval pipeline coupled with speculative decoding and structured XML schema outputs, anchoring every claim to timestamped source documents.",
+        architecture: "Kafka Data Stream -> Text Chunking & Embedding Engine -> Distributed Qdrant Cluster -> Multi-Head Re-ranking -> vLLM Speculative Decoding."
+      },
+      {
+        title: "Autonomous Supply Chain Forecaster",
+        client: "Boltshift Logistics",
+        category: "Predictive Analytics & Neural Forecasters",
+        metrics: "$14.2M Inventory Overstock Saved · 96.4% Accuracy",
+        challenge: "Global supply chain disruptions causing millions in port demurrage fees and stockouts across 1,200 international shipping corridors.",
+        solution: "Built a spatio-temporal graph neural network trained on 10 years of maritime telemetry, weather forecasts, and supplier lead-times for predictive auto-routing.",
+        architecture: "TimescaleDB -> PyTorch Forecasting Pipeline -> Ray Distributed Training -> Automated Kubernetes Cron Deployment."
+      },
+      {
+        title: "Sub-Millimeter Industrial Anomaly Inspection",
+        client: "Hyperion Robotics",
+        category: "Computer Vision & Edge Systems",
+        metrics: "0.002% Defect Escape Rate · 2,400 Units / Minute",
+        challenge: "Manufacturing high-precision silicon wafers required inspecting micrometer surface defects at line speeds exceeding 40 units per second.",
+        solution: "Customized lightweight vision transformers compiled via TensorRT for edge Nvidia Jetson Orin modules operating directly on high-speed camera feeds.",
+        architecture: "GigE Vision Cameras -> Nvidia Jetson Orin Edge Node -> TensorRT Inference (8ms) -> PLC Industrial Actuator Signal."
+      }
+    ];
+
+    function openCaseStudyModal(index) {
+      const study = CASE_STUDIES[index];
+      if (!study) return;
+
+      const content = document.getElementById('caseStudyModalContent');
+      content.innerHTML = `
+        <div class="eyebrow"><span class="dot"></span>${study.category}</div>
+        <h2 class="head" style="font-size:28px; margin-bottom:6px;">${study.title}</h2>
+        <div style="font-size:13px; font-weight:700; color:var(--text-muted); margin-bottom:20px; font-family:var(--mono);">${study.client}</div>
+        
+        <div style="background:var(--bg-dark); color:#fff; border-radius:var(--radius-md); padding:16px 20px; margin-bottom:24px;">
+          <div style="font-size:11px; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">Verified Impact</div>
+          <div style="font-size:15px; font-weight:600; font-family:var(--serif);">${study.metrics}</div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h4 style="font-size:14px; font-weight:700; text-transform:uppercase; color:var(--text-heading); margin-bottom:6px;">The Challenge</h4>
+          <p style="font-size:14px; line-height:1.65; color:var(--text-body);">${study.challenge}</p>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h4 style="font-size:14px; font-weight:700; text-transform:uppercase; color:var(--text-heading); margin-bottom:6px;">Our Solution</h4>
+          <p style="font-size:14px; line-height:1.65; color:var(--text-body);">${study.solution}</p>
+        </div>
+
+        <div style="margin-bottom:28px; background:rgba(255,255,255,0.5); padding:16px; border-radius:var(--radius-md); border:1px solid var(--line);">
+          <h4 style="font-size:13px; font-weight:700; text-transform:uppercase; color:var(--text-heading); margin-bottom:6px;">Technical Architecture Topology</h4>
+          <code style="font-family:var(--mono); font-size:12px; color:#1e1e24; display:block; line-height:1.5;">${study.architecture}</code>
+        </div>
+
+        <button class="btn btn-solid" style="width:100%;" onclick="closeModal('caseStudyModal'); openConsultationModal();">
+          Inquire About Similar Architecture
+          <span class="ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </button>
+      `;
+      openModal('caseStudyModal');
+    }
+
+    function openInsightModal(index) {
+      openCaseStudyModal(index);
+    }
+
+    /* =========================================================
+       11. HEADER SCROLL & PROGRESS BAR
+    ========================================================= */
+    const siteHeader = document.getElementById('siteHeader');
+    const scrollProgress = document.getElementById('scrollProgress');
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPct = (scrollTop / docHeight) * 100;
+
+      if (scrollProgress) {
+        scrollProgress.style.width = `${scrollPct}%`;
+      }
+
+      if (siteHeader) {
+        if (scrollTop > 40) siteHeader.classList.add('scrolled');
+        else siteHeader.classList.remove('scrolled');
+      }
+    });
+
+    /* =========================================================
+       12. MOBILE NAVIGATION
+    ========================================================= */
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const closeMobileMenu = document.getElementById('closeMobileMenu');
+
+    if (menuToggle && mobileOverlay) {
+      menuToggle.addEventListener('click', () => mobileOverlay.classList.add('active'));
+    }
+    if (closeMobileMenu && mobileOverlay) {
+      closeMobileMenu.addEventListener('click', () => mobileOverlay.classList.remove('active'));
+    }
+    function closeMobileNav() {
+      if (mobileOverlay) mobileOverlay.classList.remove('active');
+    }
+  </script>
+</body>
+
+</html>
