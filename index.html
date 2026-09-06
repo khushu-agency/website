@@ -3620,27 +3620,30 @@
             <span class="pill-radio" onclick="selectPill(this)">Computer Vision</span>
             <span class="pill-radio" onclick="selectPill(this)">Security Audit</span>
           </div>
+          <input type="hidden" id="cCapabilityArea" name="capabilityArea" value="Autonomous Agents">
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
           <div class="form-group">
             <label for="cName">Your Name *</label>
-            <input type="text" id="cName" class="form-control" placeholder="Jane Doe" required>
+            <input type="text" id="cName" name="name" class="form-control" placeholder="Jane Doe" required>
           </div>
           <div class="form-group">
             <label for="cEmail">Work Email *</label>
-            <input type="email" id="cEmail" class="form-control" placeholder="jane@enterprise.com" required>
+            <input type="email" id="cEmail" name="email" class="form-control" placeholder="jane@enterprise.com"
+              required>
           </div>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
           <div class="form-group">
             <label for="cCompany">Organization / Company *</label>
-            <input type="text" id="cCompany" class="form-control" placeholder="Acme Global Inc." required>
+            <input type="text" id="cCompany" name="organization" class="form-control" placeholder="Acme Global Inc."
+              required>
           </div>
           <div class="form-group">
             <label for="cBudget">Estimated Investment</label>
-            <select id="cBudget" class="form-control">
+            <select id="cBudget" name="investment" class="form-control">
               <option value="50k-100k">$50,000 – $100,000 (PoV Pilot)</option>
               <option value="100k-250k" selected>$100,000 – $250,000 (Full Integration)</option>
               <option value="250k+">$250,000+ (Enterprise Multi-Mesh)</option>
@@ -3650,7 +3653,7 @@
 
         <div class="form-group">
           <label for="cDetails">Initiative Goals &amp; Current Technical Challenges</label>
-          <textarea id="cDetails" class="form-control" rows="3"
+          <textarea id="cDetails" name="goals" class="form-control" rows="3"
             placeholder="Describe the current workflow bottlenecks or AI ambitions..."></textarea>
         </div>
 
@@ -4221,8 +4224,16 @@
     }
 
     function selectPill(pill) {
-      document.querySelectorAll('.pill-radio').forEach(p => p.classList.remove('selected'));
+      document.querySelectorAll('.pill-radio').forEach(p => {
+        p.classList.remove('selected');
+      });
+
       pill.classList.add('selected');
+
+      const capabilityField = document.getElementById('cCapabilityArea');
+      if (capabilityField) {
+        capabilityField.value = pill.textContent.trim();
+      }
     }
 
     function showToast(msg) {
@@ -4233,11 +4244,72 @@
       setTimeout(() => toast.classList.remove('show'), 4000);
     }
 
-    function handleConsultationSubmit(e) {
+
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxDERgFwpD6VAbpBUfeTfx5JmdR4LFH9g9513mYfHbqkWJVwI5DydkI88nruQMInqd_DA/exec";
+
+    async function handleConsultationSubmit(e) {
       e.preventDefault();
-      closeModal('consultationModal');
-      showToast("Thank you! Your AI blueprint request has been received. Our team will contact you within 24h.");
-      e.target.reset();
+
+      const form = e.target;
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      // Prevent multiple submissions
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.dataset.originalText = submitButton.innerText;
+        submitButton.innerText = "Sending...";
+      }
+
+      const formData = new FormData(form);
+      const data = new URLSearchParams();
+
+      data.append("capabilityArea", formData.get("capabilityArea") || "");
+      data.append("name", formData.get("name") || "");
+      data.append("email", formData.get("email") || "");
+      data.append("organization", formData.get("organization") || "");
+      data.append("investment", formData.get("investment") || "");
+      data.append("goals", formData.get("goals") || "");
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: data.toString()
+        });
+
+        // Show success message
+        closeModal('consultationModal');
+
+        showToast(
+          "Thank you! Your AI blueprint request has been received. Our team will contact you within 24h."
+        );
+
+        form.reset();
+
+        // Restore the default capability selection after reset.
+        document.querySelectorAll('.pill-radio').forEach(p => p.classList.remove('selected'));
+        const defaultPill = document.querySelector('.pill-radio');
+        const capabilityField = document.getElementById('cCapabilityArea');
+        if (defaultPill) defaultPill.classList.add('selected');
+        if (capabilityField) capabilityField.value = defaultPill ? defaultPill.textContent.trim() : 'Autonomous Agents';
+
+      } catch (error) {
+        console.error("Form submission error:", error);
+
+        showToast(
+          "Something went wrong. Please try again."
+        );
+
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.innerText =
+            submitButton.dataset.originalText || "Submit";
+        }
+      }
     }
 
     function handleNewsletter(e) {
