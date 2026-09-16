@@ -387,8 +387,8 @@
     }
 
     .logo-mark-wrap {
-      width: 40px;
-      height: 40px;
+      width: 46px;
+      height: 46px;
       position: relative;
       display: flex;
       align-items: center;
@@ -396,8 +396,8 @@
     }
 
     .logo-mark {
-      width: 36px;
-      height: 36px;
+      width: 42px;
+      height: 42px;
       transition: transform 0.5s var(--ease-out-expo);
     }
 
