@@ -4,6 +4,8 @@ import { services } from "@/data/services";
 import { projects } from "@/data/projects";
 import { insights } from "@/data/insights";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteConfig.url;
   const now = new Date();

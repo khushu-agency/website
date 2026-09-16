@@ -1,5 +1,3 @@
-"use server";
-
 import { contactFormSchema, type ContactFormValues } from "@/lib/validation/contact";
 
 export type ContactActionResult =
@@ -28,18 +26,15 @@ export type ContactActionResult =
  * accepted the submission; it just assumes success if no network exception
  * was thrown.
  *
- * Here the POST happens from this server action instead, which runs on the
- * server, not in the browser. Server-to-server requests aren't subject to
- * CORS at all, so `no-cors` isn't needed — this can read the real response
- * status and body, and only reports success when Apps Script actually
- * confirms the row was written (or at minimum, responds with a 2xx status).
+ * The GitHub Pages deployment is static, so this runs in the browser and
+ * uses the Apps Script Web App's no-cors endpoint.
  *
  * If your Apps Script's `doPost(e)` reads different field/column names than
  * the ones sent below, either adjust the script to match these, or adjust
  * the `params.append(...)` calls below to match the script — whichever is
  * less friction on your end.
  *
- * If GOOGLE_SHEETS_WEBHOOK_URL is not set (e.g. local dev without it
+ * If NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL is not set (e.g. local dev without it
  * configured yet), this falls back to a no-op success so the form still
  * works end-to-end during development.
  *
@@ -65,7 +60,7 @@ export async function submitContactForm(
   }
 
   const data = parsed.data;
-  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const webhookUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!webhookUrl) {
     // No Sheets webhook configured yet — succeed locally so the form and
@@ -75,31 +70,27 @@ export async function submitContactForm(
     return { success: true };
   }
 
-  try {
-    const params = new URLSearchParams();
-    params.append("name", data.name);
-    params.append("email", data.email);
-    params.append("company", data.company ?? "");
-    params.append("projectTitle", data.projectTitle);
-    params.append("serviceArea", data.serviceArea); // the "capability area" field
-    params.append("problem", data.problem);
-    params.append("description", data.description);
-    params.append("timeline", data.timeline);
-    params.append("budget", data.budget ?? "");
-    params.append("additionalContext", data.additionalContext ?? "");
-    params.append("submittedAt", new Date().toISOString());
-    params.append("source", "khushu.ai/contact");
+  const params = new URLSearchParams();
+  params.append("name", data.name);
+  params.append("email", data.email);
+  params.append("company", data.company ?? "");
+  params.append("projectTitle", data.projectTitle);
+  params.append("serviceArea", data.serviceArea);
+  params.append("problem", data.problem);
+  params.append("description", data.description);
+  params.append("timeline", data.timeline);
+  params.append("budget", data.budget ?? "");
+  params.append("additionalContext", data.additionalContext ?? "");
+  params.append("submittedAt", new Date().toISOString());
+  params.append("source", "khushu.tech/contact");
 
-    const response = await fetch(webhookUrl, {
+  try {
+    await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params.toString(),
+      mode: "no-cors",
     });
-
-    if (!response.ok) {
-      return { success: false, error: "Something went wrong sending your brief. Please try again." };
-    }
-
     return { success: true };
   } catch {
     return { success: false, error: "Something went wrong sending your brief. Please try again." };
