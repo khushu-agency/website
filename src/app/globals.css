@@ -375,11 +375,15 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 19px;
+      font-size: 21px;
       font-weight: 800;
       letter-spacing: 0.08em;
       color: var(--text-heading);
       position: relative;
+    }
+
+    .logo-mark-wrap + .logo-wordmark {
+      transform: translateY(2px);
     }
 
     .logo-mark-wrap {

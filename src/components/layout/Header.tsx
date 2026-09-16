@@ -23,7 +23,7 @@ export function Header() {
             <div className="logo-mark-wrap">
               <LogoMark />
             </div>
-            KHUSHU
+            <span className="logo-wordmark">KHUSHU</span>
           </Link>
 
           <div className="status-badge">
@@ -87,7 +87,7 @@ export function Header() {
                 <div className="logo-mark-wrap">
                   <LogoMark />
                 </div>
-                KHUSHU
+                <span className="logo-wordmark">KHUSHU</span>
               </Link>
               <button
                 className="modal-close"
