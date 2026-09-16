@@ -374,7 +374,7 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 12px;
       font-size: 19px;
       font-weight: 800;
       letter-spacing: 0.08em;
