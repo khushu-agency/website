@@ -2,13 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { primaryNav } from "@/data/site";
 import { LogoMark } from "@/components/ui/LogoMark";
 
 export function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 32);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -17,7 +27,7 @@ export function Header() {
 
   return (
     <>
-      <header className="site-header" id="siteHeader">
+      <header className={`site-header${scrolled ? " scrolled" : ""}`} id="siteHeader">
         <div className="wrap">
           <Link href="/" className="logo" aria-label="Khushu Homepage">
             <div className="logo-mark-wrap">
