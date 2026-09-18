@@ -4,8 +4,8 @@ export const siteConfig = {
   tagline: "Digital Systems & AI Agency",
   description:
     "Khushu is a digital systems and AI agency combining design, software, AI and automation to build digital experiences and intelligent business systems.",
-  url: "https://khushu.ai",
-  email: "hello@khushu.ai",
+  url: "https://khushu.tech",
+  email: "info@khushu.tech",
 };
 
 export const primaryNav = [
